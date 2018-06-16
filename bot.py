@@ -1,199 +1,93 @@
 import discord
-from discord.ext import commands
 from discord.ext.commands import Bot
+from discord.ext import commands
 import asyncio
-import random
-import requests
-import os
+import time
 
-
-type = 1
-client = discord.Client()
-
-players = {}
-
-hendrikid = "227403635166806016"
-
+import io
 minutes = 0
-hour = 0
+hour = 2
 
-@client.event
+Client = discord.Client()  
+client = commands.Bot(command_prefix = "?") 
+
+
+
+@client.event 
 async def on_ready():
-    print("Eingeloggt als BoredBot V0.1")
-    print(client.user.name)
-    print(client.user.id)
-    print("------------")
-    await client.change_presence(game=discord.Game(name="access with !help"))
-
+    print("Bot is online and connected to Discord")
+    await client.change_presence(game=discord.Game(name="In KuedoxServer - https://discord.gg/QsHTZBS "))
 
 @client.event
 async def on_message(message):
-    if message.content.startswith("!test"):
-        await client.send_message(message.channel, "Test erfolgreich")
+    if message.content == "!help":
+        await client.send_message(message.author, "**__:הפקודות בשרת__** \n \n  **!help** - שולח את פקודות השרת \n \n **!Channel** - שולח קישור לערוץ של קודוקס \n \n **!Shop** - שולח קישור לחנות של קודוקס \n \n **!inv** - שולח קישור להיכנס לשרת " )
+
+    if message.content == "!Channel":
+        await client.send_message(message.channel, "**__KuedoxChannel - __** https://www.youtube.com/channel/UCQS4XEIHjOuIwwOghvoBp5A")
 
 
-    if message.content.startswith("!ping"):
-        await client.send_message (message.channel, "PONG!")
+    if message.content == "!Shop":
+        await client.send_message(message.channel, "**My-Shop - ** https://sellfy.com/Kuedox")
 
+    if message.content == "!inv":
+        await client.send_message(message.channel, "**__InviteLink__** - https://discord.gg/QsHTZBS")
 
-    if message.content.startswith("!supreme"):
-        await client.send_message (message.channel, "http://www.supremenewyork.com")
-
-
-    if message.content.startswith("!steam"):
-        await client.send_message (message.channel, "http://steamcommunity.com/id/cautus/")
-
-
-    if message.content.startswith("!owner"):
-        await client.send_message(message.channel, "Dieser Bot wurde von Hendrik erstellt. Bin stolz drauf.")
-
-
-    if message.content.startswith("!memes"):
-        await client.send_message(message.channel, "Memes an die Macht!")
-
-
-    if message.content.lower().startswith("!info"):
-        info = discord.Embed(
-            title="Hey, Ich bin der BoredBot :)",
-            color=0xe74c3c,
-            description="Hey, hier siehst Du die aktuellen Commands:\n"
-                        "!Wenn ihn Vorschläge für die Verbesserung des Bots habt, könnt ihr mich gerne anschreiben. Auch im Falle eines Buggs, stehe ich zur Verfügung\n"
-                        "DiscordID: H3ndrik#7385\n"
-                        "\n"
-                        "\n"
-                        "Beta 0.1"
-
-        )
-
-        await client.send_message(message.channel, embed=info)
-
-
-
-    if message.content.startswith("!russia"):
-        response = requests.get("https://i.ytimg.com/vi/d0z_uXA_pdI/maxresdefault.jpg", stream=True)
-        await client.send_file(message.channel, io.BytesIO(response.raw.read()), filename="Bild.png", content="For Mother Russia")
-
-
-    if message.content.lower().startswith("!help"):
-        help = discord.Embed(
-            title="**Hey, Ich bin der BoredBot** :)",
-            color=0xe74c3c,
-            description="hier kannst du alle derzeit möglichen Commands sehen: \n"
-                        "https://pastebin.com/GKcrpTun"
-
-
-
-        )
-        help.set_author(
-            name="*klick hier*",
-            url="https://www.youtube.com/watch?v=MG9e6m_4yVY"
-
-         )
-        help.add_field(
-            name="**Neuerungen bei der V0.2**",
-            value="1. Custom Command bei PN\n" 
-                  "2. Es wurde die Musik Funktion hinzugefügt\n",
-        )
-
-
-
-
-        await client.send_message(message.channel, embed=help)
-
-    if message.content.startswith('!game') and message.author.id == hendrikid:
-        game = message.content[6:]
-        await client.change_presence(game=discord.Game(name=game))
-        await client.send_message(message.channel, "Status zu " + game + " geändert")
-
-    if message.content.startswith("!hardbass"):
-        await client.send_message(message.channel,"Ich heiße Niklas, und das ist mein Hardbass!")
-
-
-
-    if message.content.startswith("!asmr"):
-        await client.send_message(message.channel, "Autonomous Sensory Meridian Response (oft als ASMR abgekürzt) bezeichnet die Erfahrung eines statisch-ähnlichen oder kribbelnden Gefühls auf der Haut, das typischerweise auf der Kopfhaut beginnt und sich am Nacken und der oberen Wirbelsäule entlang bewegt (sogenannte Tingles)")
-
-
-    if message.content.startswith("!gif"):
-        gif_tag = message.content[5:]
-        rgif = g.random(tag=str(gif_tag))
-        response = requests.get(
-            str(rgif.get("data", {}).get('image_original_url')), stream=True
-        )
-        await  client.send_file(message.channel, io.BytesIO(response.raw.read()), filename="video.gif")
+    if message.content == "אפשר באנר?":
+        await client.send_message(message.channel, "תקנה.")
         
-        
-    if message.content.startswith('!uptime'):
-        await client.send_message(message.channel, "**Ich bin schon {0} Stunde/n und {1} Minuten online auf {2}. **".format(hour, minutes, message.server))
+    if message.content == "קוודוקס":
+        await client.send_message(message.channel, ":3?כן")
 
-    if message.content.startswith('!join'):
-        try:
-            channel = message.author.voice.voice_channel
-            await client.join_voice_channel(channel)
-        except discord.errors.InvalidArgument:
-            await client.send_message(message.channel, "Kein Voice channel gefunden.")
-        except Exception as error:
-            await client.send_message(message.channel, "Ein Error: ```{error}```".format(error=error))
 
-    if message.content.startswith('!quit'):
-        try:
-            voice_client = client.voice_client_in(message.server)
-            await voice_client.disconnect()
-        except AttributeError:
-            await client.send_message(message.channel, "Ich bin zur zeit nicht connected.")
-        except Exception as Hugo:
-            await client.send_message(message.channel, "Ein Error: ```{haus}```".format(haus=Hugo))
 
-    if message.content.startswith('!play '):
-        try:
-            yt_url = message.content[6:]
-            channel = message.author.voice.voice_channel
-            voice = await client.join_voice_channel(channel)
-            player = await voice.create_ytdl_player(yt_url)
-            players[message.server.id] = player
-            player.start()
-        except:
-            await client.send_message(message.channel, "Error.")
+    if message.content.startswith('!user'):
+      #  if message.author.role == "421580859729248267":
+            user = message.mentions[0]
+            userjoinedat = str(user.joined_at).split('.', 1)[0]
+            usercreatedat = str(user.created_at).split('.', 1)[0]
 
-    if message.content.startswith('!pause'):
-        try:
-            players[message.server.id].pause()
-        except:
-            pass
-    if message.content.startswith('!resume'):
-        try:
-            players[message.server.id].resume()
-        except:
-            pass
+
+            userembed = discord.Embed(
+                title="Username",
+                description=user.name,
+                color=0xe67e22
+            )
+            userembed.set_author(
+                name="User Info:"
+            )
+            userembed.add_field(
+                name="Joined the server at:",
+                value=userjoinedat
+
+            )
+
+            userembed.add_field(
+                 name="User Created at:",
+                 value=usercreatedat
+            )
+            userembed.add_field(
+                name="Discord_TAG:",
+                value=user.discriminator
+            )
+            userembed.add_field(
+                name="User ID:",
+                value=user.id
+            )
+                    
+            await client.send_message(message.channel, embed=userembed)
         
-        
-        
-    if message.content.lower().startswith('!flip'): #Coinflip 50/50% chance kopf oder zahl
-        choice = random.randint(1,2)
-        if choice == 1:
-            await client.add_reaction(message, '🌑')
-        if choice == 2:
-            await client.add_reaction(message, '🌕')
+     
+
+
+
+
+
+
+
         
 
-async def total_uptime():
-    await client.wait_until_ready()
-    global minutes
-    minutes = 0
-    global hour
-    hour = 0
-    while not client.is_closed:
-        await asyncio.sleep(60)
-        minutes += 1
-        if minutes == 60:
-            minutes = 0
-            hour += 1
+client.run("NDIxMzk2ODc4MjIzOTk4OTc2.DYPcxg.oGDLmSvXR9kQr2fTQWrfYcySucQ") 
+ 
 
-client.loop.create_task(total_uptime())    
-
-
-
-
-
-
-client.run(str(os.environ.get('BOT_TOKEN')))
+    
